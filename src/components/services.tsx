@@ -20,44 +20,27 @@ export function Services() {
           Services
         </Badge>
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Implementation Services
+          Enterprise-Grade Auth Implementation
         </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Secure your application with enterprise-grade authentication
-          implemented by a security specialist
+          Secure your Next.js + Supabase application with bulletproof
+          authentication
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="max-w-xl mx-auto">
         <div className="bg-card rounded-md p-8 border shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-2xl font-bold mb-6">Core Implementation</h3>
+          <h3 className="text-2xl font-bold mb-6">Complete Auth Solution</h3>
           <ul className="space-y-4 mb-8">
-            <ServiceItem text="Complete authentication system" />
-            <ServiceItem text="Multi-factor authentication" />
-            <ServiceItem text="Device session management" />
-            <ServiceItem text="Security alerts and monitoring" />
-            <ServiceItem text="API rate limiting" />
-            <ServiceItem text="Integration with your existing app" />
+            <ServiceItem text="Multi-factor authentication (Authenticator, SMS, Backup codes)" />
+            <ServiceItem text="Device session management with security alerts" />
+            <ServiceItem text="Advanced device verification system" />
+            <ServiceItem text="Configurable email alerts for unknown logins" />
+            <ServiceItem text="API rate limiting with Redis" />
+            <ServiceItem text="Developer-friendly configuration options" />
           </ul>
           <Link href="/contact">
             <Button className="w-full">Get in touch</Button>
-          </Link>
-        </div>
-
-        <div className="bg-card rounded-md p-8 border shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-2xl font-bold mb-6">Advanced Features</h3>
-          <ul className="space-y-4 mb-8">
-            <ServiceItem text="Custom authentication flows" />
-            <ServiceItem text="Advanced security policies" />
-            <ServiceItem text="User activity tracking" />
-            <ServiceItem text="Custom provider integration" />
-            <ServiceItem text="Security audit and hardening" />
-            <ServiceItem text="Ongoing security maintenance" />
-          </ul>
-          <Link href="/contact">
-            <Button variant="outline" className="w-full">
-              Learn more
-            </Button>
           </Link>
         </div>
       </div>
