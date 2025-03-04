@@ -483,9 +483,9 @@ export function ConfigSection() {
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-12">
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-4 text-center">
         <Badge variant="outline">Configuration</Badge>
-        <h2 className="text-3xl md:text-4xl font-bold">
+        <h2 className="text-3xl md:text-4xl font-bold text-balance">
           Quick Config, Full Code Access
         </h2>
         <p className="text-muted-foreground max-w-2xl text-center">
