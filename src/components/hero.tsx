@@ -12,7 +12,7 @@ export function Hero() {
           Drop in production-ready auth code with everything apps need
         </p>
         <div className="flex gap-3 justify-center">
-          <Link href="https://demo.mazeway.dev">
+          <Link href="https://demo.mazeway.dev/auth/login">
             <Button size="lg">Try demo</Button>
           </Link>
           <a
