@@ -11,8 +11,8 @@ export default function Home() {
       <main className="flex-grow flex flex-col gap-24 px-4 py-24 md:px-8">
         <Hero />
         <Features />
-        <Services />
         <ConfigSection />
+        <Services />
       </main>
     </div>
   );
