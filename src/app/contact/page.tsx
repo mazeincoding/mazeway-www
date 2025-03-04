@@ -28,8 +28,7 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "contact_form_data";
 
 const contactFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   company: z.string().optional(),
   timeline: z.string().min(1, "Timeline is required"),
@@ -53,8 +52,7 @@ export default function ContactPage() {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       company: "",
       timeline: "",
@@ -171,44 +169,25 @@ export default function ContactPage() {
               className="max-w-xl mx-auto w-full space-y-8"
             >
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John" {...field} />
-                        </FormControl>
-                        <div className="h-5">
-                          <FormMessage className="absolute" />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Doe" {...field} />
-                        </FormControl>
-                        <div className="h-5">
-                          <FormMessage className="absolute" />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem className="relative">
+                    <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
@@ -217,9 +196,7 @@ export default function ContactPage() {
                           {...field}
                         />
                       </FormControl>
-                      <div className="h-5">
-                        <FormMessage className="absolute" />
-                      </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -228,14 +205,12 @@ export default function ContactPage() {
                   control={form.control}
                   name="company"
                   render={({ field }) => (
-                    <FormItem className="relative">
+                    <FormItem>
                       <FormLabel>Company</FormLabel>
                       <FormControl>
                         <Input placeholder="Your company name" {...field} />
                       </FormControl>
-                      <div className="h-5">
-                        <FormMessage className="absolute" />
-                      </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -244,7 +219,7 @@ export default function ContactPage() {
                   control={form.control}
                   name="timeline"
                   render={({ field }) => (
-                    <FormItem className="relative">
+                    <FormItem>
                       <FormLabel>Timeline</FormLabel>
                       <FormControl>
                         <Input
@@ -252,9 +227,7 @@ export default function ContactPage() {
                           {...field}
                         />
                       </FormControl>
-                      <div className="h-5">
-                        <FormMessage className="absolute" />
-                      </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -263,7 +236,7 @@ export default function ContactPage() {
                   control={form.control}
                   name="message"
                   render={({ field }) => (
-                    <FormItem className="relative">
+                    <FormItem>
                       <FormLabel>Project details</FormLabel>
                       <FormControl>
                         <Textarea
@@ -272,9 +245,7 @@ export default function ContactPage() {
                           {...field}
                         />
                       </FormControl>
-                      <div className="h-5">
-                        <FormMessage className="absolute" />
-                      </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
