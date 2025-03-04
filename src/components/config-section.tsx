@@ -420,7 +420,13 @@ function ConfigGroupView({
           {item.tooltip}
         </span>
       </span>
-      : {isOpen ? "{" : "{ ... }"}
+      :{" "}
+      <span
+        className="cursor-pointer hover:text-foreground transition-colors"
+        onClick={onToggle}
+      >
+        {isOpen ? "{" : "{ ... }"}
+      </span>
       {isOpen && (
         <>
           {"\n"}
