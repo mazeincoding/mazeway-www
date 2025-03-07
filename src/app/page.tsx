@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { ConfigSection } from "@/components/config-section";
 import { Hero } from "@/components/hero";
 import { Features } from "@/components/features";
 import { Services } from "@/components/services";
+
+export const metadata: Metadata = {
+  title: "Mazeway Auth - Own Your Authentication Code",
+  description:
+    "Authentication should live in your project, not in node_modules. A complete, production-ready auth foundation you can build on.",
+};
 
 export default function Home() {
   return (
