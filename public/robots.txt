@@ -1,0 +1,6 @@
+# Allow all search engines to index everything
+User-agent: *
+Allow: /
+
+# Point to sitemap
+Sitemap: https://mazeway.dev/sitemap.xml 

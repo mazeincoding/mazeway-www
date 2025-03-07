@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About - Mazeway Auth",
+  description:
+    "Learn about Mazeway Auth - a security-first developer building authentication that belongs in your project, not in node_modules.",
+};
 
 export default function AboutPage() {
   return (

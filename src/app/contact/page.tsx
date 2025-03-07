@@ -21,7 +21,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 
@@ -36,8 +35,6 @@ const contactFormSchema = z.object({
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
-
-type SaveStatus = "error" | "success";
 
 export default function ContactPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
