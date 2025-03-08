@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow flex flex-col gap-12 px-4 py-24 md:px-8">
+      <main className="flex-grow flex flex-col gap-12 py-16 lg:py-24 px-8">
         <div className="w-full max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold tracking-tight mb-6">
             Building Secure Auth for Modern Apps
