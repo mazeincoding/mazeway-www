@@ -11,12 +11,16 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("📧 Starting contact form submission process...");
+
     // Apply rate limiting if enabled
     if (apiRateLimit) {
       const ip = getClientIp(request);
+      console.log("🔒 Rate limiting check for IP:", ip);
       const { success, limit, reset } = await apiRateLimit.limit(ip);
 
       if (!success) {
+        console.log("⛔ Rate limit exceeded for IP:", ip);
         return NextResponse.json(
           {
             error: "Too many requests",
@@ -36,13 +40,31 @@ export async function POST(request: NextRequest) {
 
     // Parse and validate the request body
     const body = await request.json();
+    console.log("📝 Received form data:", {
+      ...body,
+      // Redact email for privacy in logs
+      email: body.email
+        ? `${body.email.slice(0, 3)}...${body.email.slice(-8)}`
+        : undefined,
+    });
+
     const validatedData = contactFormSchema.parse(body);
+    console.log("✅ Form data validation passed");
+
+    // Log email configuration
+    console.log("📨 Email configuration:", {
+      from: process.env.RESEND_FROM_EMAIL,
+      to: process.env.CONTACT_FORM_RECIPIENT_EMAIL,
+      subject: `New Contact Form Submission from ${validatedData.name}`,
+    });
 
     // Render email template
     const emailHtml = await render(ContactFormEmail(validatedData));
+    console.log("📋 Email template rendered successfully");
 
     // Send email using Resend
-    await resend.emails.send({
+    console.log("🚀 Attempting to send email via Resend...");
+    const result = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
       to: process.env.CONTACT_FORM_RECIPIENT_EMAIL!,
       subject: `New Contact Form Submission from ${validatedData.name}`,
@@ -50,18 +72,30 @@ export async function POST(request: NextRequest) {
       replyTo: validatedData.email,
     });
 
+    console.log("✉️ Resend API response:", result);
+
     return NextResponse.json(
       { message: "Email sent successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Contact form submission error:", error);
+    console.error("❌ Contact form submission error:", error);
 
     if (error instanceof z.ZodError) {
+      console.log("📝 Validation error details:", error.errors);
       return NextResponse.json(
         { error: "Invalid form data", details: error.errors },
         { status: 400 }
       );
+    }
+
+    // Log additional error details if available
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
     }
 
     return NextResponse.json(
