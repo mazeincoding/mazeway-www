@@ -9,8 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Reuse the same validation schema from the frontend
 const contactFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   company: z.string().optional(),
   timeline: z.string().min(1, "Timeline is required"),
