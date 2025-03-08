@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
       to: process.env.CONTACT_FORM_RECIPIENT_EMAIL!,
-      subject: `New Contact Form Submission from ${validatedData.firstName} ${validatedData.lastName}`,
+      subject: `New Contact Form Submission from ${validatedData.name}`,
       html: emailHtml,
       replyTo: validatedData.email,
     });
