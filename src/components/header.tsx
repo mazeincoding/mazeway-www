@@ -13,10 +13,10 @@ export function Header() {
           <Image
             src="https://res.cloudinary.com/dzjgehvid/image/upload/v1741403094/text-logo-black_xh4avc.png"
             alt="Logo"
-            width={135}
-            height={36}
+            width={617}
+            height={121}
             priority
-            className="dark:invert"
+            className="dark:invert w-full h-7"
           />
         </Link>
       </div>
