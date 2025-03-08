@@ -29,6 +29,10 @@ export const metadata: Metadata = {
     "open source auth",
   ],
   authors: [{ name: "Maze" }],
+  metadataBase: new URL("https://mazeway.dev"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Mazeway Auth - Own Your Authentication Code",
     description:
