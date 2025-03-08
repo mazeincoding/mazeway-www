@@ -4,18 +4,10 @@ import { z } from "zod";
 import ContactFormEmail from "@emails/contact-form";
 import { render } from "@react-email/render";
 import { apiRateLimit, getClientIp } from "@/utils/rate-limit";
+import { contactFormSchema } from "@/lib/schemas";
 
 // Initialize Resend with API key
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Reuse the same validation schema from the frontend
-const contactFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  company: z.string().optional(),
-  timeline: z.string().min(1, "Timeline is required"),
-  message: z.string().min(10, "Project details must be at least 10 characters"),
-});
 
 export async function POST(request: NextRequest) {
   try {

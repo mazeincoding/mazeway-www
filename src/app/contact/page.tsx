@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Header } from "@/components/header";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -23,18 +22,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
+import { contactFormSchema, type ContactFormValues } from "@/lib/schemas";
 
 const STORAGE_KEY = "contact_form_data";
-
-const contactFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  company: z.string().optional(),
-  timeline: z.string().min(1, "Timeline is required"),
-  message: z.string().min(10, "Project details must be at least 10 characters"),
-});
-
-type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export default function ContactPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
