@@ -11,7 +11,7 @@ export function Header() {
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="https://rqsfebcljeizuojtkabi.supabase.co/storage/v1/object/public/logo/Frame%2038.png"
+            src="https://res.cloudinary.com/dzjgehvid/image/upload/v1741403094/text-logo-black_xh4avc.png"
             alt="Logo"
             width={135}
             height={36}
