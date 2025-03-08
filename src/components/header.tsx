@@ -16,7 +16,7 @@ export function Header() {
             width={617}
             height={121}
             priority
-            className="dark:invert h-7 w-auto"
+            className="dark:invert w-auto h-7"
           />
         </Link>
       </div>
