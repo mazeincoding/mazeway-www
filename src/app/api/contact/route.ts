@@ -10,8 +10,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Reuse the same validation schema from the frontend
 const contactFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   company: z.string().optional(),
   timeline: z.string().min(1, "Timeline is required"),
@@ -54,7 +53,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
       to: process.env.CONTACT_FORM_RECIPIENT_EMAIL!,
-      subject: `New Contact Form Submission from ${validatedData.firstName} ${validatedData.lastName}`,
+      subject: `New Contact Form Submission from ${validatedData.name}`,
       html: emailHtml,
       replyTo: validatedData.email,
     });
