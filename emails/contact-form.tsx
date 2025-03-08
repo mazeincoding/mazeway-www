@@ -13,7 +13,7 @@ import { Tailwind } from "@react-email/tailwind";
 import * as React from "react";
 
 interface ContactFormEmailProps {
-  name: striny;
+  name: string;
   email: string;
   company?: string;
   timeline: string;
