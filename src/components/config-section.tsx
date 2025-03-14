@@ -2,359 +2,42 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Info, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { Info, ChevronRight, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+
+// Add keyframes for gradient animation
+const pulseKeyframes = `
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+`;
+
+// Add style tag to head
+if (typeof document !== "undefined") {
+  const style = document.createElement("style");
+  style.textContent = pulseKeyframes;
+  document.head.appendChild(style);
+}
 
 type ConfigValue = string | number | boolean;
 
 interface ConfigGroup {
   type: "group";
-  tooltip: string;
   properties: Record<string, ConfigItem>;
 }
 
 interface ConfigProperty {
   type: "property";
   value: ConfigValue;
-  tooltip?: string;
   valueType?: "string" | "number" | "boolean";
 }
 
 type ConfigItem = ConfigGroup | ConfigProperty;
-
-const AUTH_CONFIG_STRUCTURE: Record<string, ConfigItem> = {
-  verificationMethods: {
-    type: "group",
-    tooltip: "Available verification methods for both basic and 2FA accounts",
-    properties: {
-      email: {
-        type: "group",
-        tooltip: "Email verification settings",
-        properties: {
-          title: {
-            type: "property",
-            value: "Email",
-            valueType: "string",
-          },
-          description: {
-            type: "property",
-            value: "Receive a verification code via email",
-            valueType: "string",
-          },
-          type: {
-            type: "property",
-            value: "email",
-            valueType: "string",
-          },
-          enabled: {
-            type: "property",
-            value: true,
-            valueType: "boolean",
-          },
-        },
-      },
-      password: {
-        type: "group",
-        tooltip: "Password verification settings",
-        properties: {
-          title: {
-            type: "property",
-            value: "Password",
-            valueType: "string",
-          },
-          description: {
-            type: "property",
-            value: "Verify using your account password",
-            valueType: "string",
-          },
-          type: {
-            type: "property",
-            value: "password",
-            valueType: "string",
-          },
-          enabled: {
-            type: "property",
-            value: true,
-            valueType: "boolean",
-          },
-        },
-      },
-      twoFactor: {
-        type: "group",
-        tooltip: "Two-factor authentication methods",
-        properties: {
-          authenticator: {
-            type: "group",
-            tooltip: "Authenticator app settings",
-            properties: {
-              title: {
-                type: "property",
-                value: "Authenticator app",
-                valueType: "string",
-              },
-              description: {
-                type: "property",
-                value: "Use your authenticator app to verify your identity",
-                valueType: "string",
-              },
-              type: {
-                type: "property",
-                value: "authenticator",
-                valueType: "string",
-              },
-              enabled: {
-                type: "property",
-                value: true,
-                valueType: "boolean",
-              },
-            },
-          },
-          sms: {
-            type: "group",
-            tooltip: "SMS verification settings (requires Twilio setup)",
-            properties: {
-              title: {
-                type: "property",
-                value: "SMS",
-                valueType: "string",
-              },
-              description: {
-                type: "property",
-                value: "Receive a verification code via SMS",
-                valueType: "string",
-              },
-              type: {
-                type: "property",
-                value: "sms",
-                valueType: "string",
-              },
-              enabled: {
-                type: "property",
-                value: false,
-                valueType: "boolean",
-                tooltip: "Disabled by default - enable if you've set up Twilio",
-              },
-            },
-          },
-          backupCodes: {
-            type: "group",
-            tooltip: "Backup codes settings",
-            properties: {
-              title: {
-                type: "property",
-                value: "Backup codes",
-                valueType: "string",
-              },
-              description: {
-                type: "property",
-                value: "Use a backup code to verify your identity",
-                valueType: "string",
-              },
-              type: {
-                type: "property",
-                value: "backup_codes",
-                valueType: "string",
-              },
-              enabled: {
-                type: "property",
-                value: true,
-                valueType: "boolean",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  backupCodes: {
-    type: "group",
-    tooltip: "Backup codes generation settings",
-    properties: {
-      format: {
-        type: "property",
-        value: "words",
-        valueType: "string",
-        tooltip: "Format can be: words, alphanumeric, or numeric",
-      },
-      count: {
-        type: "property",
-        value: 10,
-        valueType: "number",
-        tooltip: "Number of backup codes to generate",
-      },
-      wordCount: {
-        type: "property",
-        value: 6,
-        valueType: "number",
-        tooltip: "Number of words per code (if using words format)",
-      },
-      alphanumericLength: {
-        type: "property",
-        value: 8,
-        valueType: "number",
-        tooltip: "Length of alphanumeric codes",
-      },
-    },
-  },
-  deviceSessions: {
-    type: "group",
-    tooltip: "Device session settings",
-    properties: {
-      maxAge: {
-        type: "property",
-        value: 365,
-        valueType: "number",
-        tooltip:
-          "Device sessions last for 1 year to match Supabase's refresh token expiration",
-      },
-    },
-  },
-  sensitiveActionGracePeriod: {
-    type: "property",
-    value: 5,
-    valueType: "number",
-    tooltip:
-      "Minutes before re-verification needed for sensitive actions (per device session)",
-  },
-  requireFreshVerification: {
-    type: "group",
-    tooltip: "Which operations need fresh verification",
-    properties: {
-      revokeDevices: {
-        type: "property",
-        value: false,
-        valueType: "boolean",
-      },
-      deleteAccount: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-    },
-  },
-  deviceVerification: {
-    type: "group",
-    tooltip: "Settings for unknown device verification",
-    properties: {
-      codeExpirationTime: {
-        type: "property",
-        value: 10,
-        valueType: "number",
-        tooltip: "Minutes until verification code expires",
-      },
-      codeLength: {
-        type: "property",
-        value: 6,
-        valueType: "number",
-      },
-    },
-  },
-  emailAlerts: {
-    type: "group",
-    tooltip: "Email alert settings for login attempts",
-    properties: {
-      enabled: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-        tooltip: "Master switch to enable/disable all login email alerts",
-      },
-      alertMode: {
-        type: "property",
-        value: "unknown_only",
-        valueType: "string",
-        tooltip:
-          "all = send for every login, unknown_only = only for new/unknown devices",
-      },
-      confidenceThreshold: {
-        type: "property",
-        value: 70,
-        valueType: "number",
-        tooltip:
-          "Only send alerts for devices with confidence score below this threshold when in unknown_only mode",
-      },
-    },
-  },
-  emailVerification: {
-    type: "group",
-    tooltip: "Email verification code settings",
-    properties: {
-      codeExpirationTime: {
-        type: "property",
-        value: 10,
-        valueType: "number",
-        tooltip: "Minutes until verification code expires",
-      },
-      codeLength: {
-        type: "property",
-        value: 6,
-        valueType: "number",
-      },
-    },
-  },
-  passwordReset: {
-    type: "group",
-    tooltip: "Password reset settings",
-    properties: {
-      requireReloginAfterReset: {
-        type: "property",
-        value: false,
-        valueType: "boolean",
-        tooltip:
-          "Whether users need to log in again after resetting their password",
-      },
-    },
-  },
-  api_rate_limit: {
-    type: "group",
-    tooltip: "API rate limiting settings",
-    properties: {
-      enabled: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-    },
-  },
-  passwordRequirements: {
-    type: "group",
-    tooltip: "Password strength and validation requirements",
-    properties: {
-      minLength: {
-        type: "property",
-        value: 8,
-        valueType: "number",
-        tooltip:
-          "Minimum password length (must match Supabase dashboard settings)",
-      },
-      maxLength: {
-        type: "property",
-        value: 72,
-        valueType: "number",
-      },
-      requireLowercase: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-      requireUppercase: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-      requireNumbers: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-      requireSymbols: {
-        type: "property",
-        value: true,
-        valueType: "boolean",
-      },
-    },
-  },
-} as const;
 
 function ConfigValue({ value, type }: { value: ConfigValue; type?: string }) {
   if (type === "string") {
@@ -371,13 +54,8 @@ function ConfigPropertyView({
   item: ConfigProperty;
 }) {
   return (
-    <span className="group relative inline-block">
+    <span className="inline-block">
       <span className="text-orange-500">{name}</span>
-      {item.tooltip && (
-        <span className="invisible group-hover:visible absolute top-1/2 left-full ml-4 -translate-y-1/2 px-3 py-2 bg-popover text-popover-foreground text-xs rounded-lg shadow-lg whitespace-nowrap">
-          {item.tooltip}
-        </span>
-      )}
     </span>
   );
 }
@@ -407,7 +85,7 @@ function ConfigGroupView({
   return (
     <>
       <span
-        className={`group relative inline-block cursor-pointer hover:text-foreground transition-colors ${!isOpen ? "text-muted-foreground" : ""}`}
+        className={`inline-block cursor-pointer hover:text-foreground transition-colors ${!isOpen ? "text-muted-foreground" : ""}`}
         onClick={onToggle}
       >
         <span className="flex items-center gap-1">
@@ -415,9 +93,6 @@ function ConfigGroupView({
             className={`h-3 w-3 transition-transform ${isOpen ? "rotate-90" : ""}`}
           />
           <span>{name}</span>
-        </span>
-        <span className="invisible group-hover:visible absolute top-1/2 left-full ml-4 -translate-y-1/2 px-3 py-2 bg-popover text-popover-foreground text-xs rounded-lg shadow-lg whitespace-nowrap">
-          {item.tooltip}
         </span>
       </span>
       :{" "}
@@ -477,6 +152,127 @@ export function ConfigSection() {
     backupCodes: true,
     "verificationMethods.twoFactor.backupCodes": true,
   });
+  const [configData, setConfigData] = useState<Record<
+    string,
+    ConfigItem
+  > | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        // Using GitHub's API to get the file content
+        const response = await fetch(
+          "https://api.github.com/repos/mazeincoding/Mazeway/contents/src/config/auth.ts"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+
+        const data = await response.json();
+        const content = atob(data.content); // Decode base64 content
+
+        // Extract the config object using a more reliable regex that handles TypeScript
+        const configMatch = content.match(
+          /export const AUTH_CONFIG = ({[\s\S]*?}) as const;/
+        );
+        if (!configMatch) {
+          throw new Error("Could not find AUTH_CONFIG in the file");
+        }
+
+        // Clean up TypeScript-specific syntax
+        const rawConfig = configMatch[1];
+        console.log("Raw config:", rawConfig);
+
+        const processedString = rawConfig
+          // Remove comments
+          .replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "")
+          // Remove type assertions
+          .replace(
+            / as (?:TTwoFactorMethod|TVerificationMethod|"words" \| "alphanumeric" \| "numeric"|"all" \| "unknown_only"|const)/g,
+            ""
+          )
+          // Add quotes to all object keys
+          .replace(/(\b\w+)(?=\s*:)/g, '"$1"')
+          // Fix any double-quoted numbers or booleans
+          .replace(/"(true|false|\d+)"/g, "$1")
+          // Remove trailing commas
+          .replace(/,(\s*[}\]])/g, "$1")
+          // Clean up any whitespace
+          .trim();
+
+        console.log("Processed config:", processedString);
+
+        try {
+          const parsedConfig = JSON.parse(processedString);
+          console.log("Successfully parsed config:", parsedConfig);
+
+          // Convert the flat config into our hierarchical structure
+          const newConfig: Record<string, ConfigItem> = {};
+
+          Object.entries(parsedConfig).forEach(([key, value]) => {
+            if (typeof value === "object" && value !== null) {
+              // It's a group
+              newConfig[key] = {
+                type: "group",
+                properties: Object.entries(value).reduce(
+                  (acc, [k, v]) => {
+                    if (typeof v === "object" && v !== null) {
+                      // Nested group
+                      acc[k] = {
+                        type: "group",
+                        properties: Object.entries(v).reduce(
+                          (innerAcc, [innerK, innerV]) => {
+                            innerAcc[innerK] = {
+                              type: "property",
+                              value: innerV as ConfigValue,
+                              valueType: typeof innerV as
+                                | "string"
+                                | "number"
+                                | "boolean",
+                            };
+                            return innerAcc;
+                          },
+                          {} as Record<string, ConfigItem>
+                        ),
+                      };
+                    } else {
+                      // Property
+                      acc[k] = {
+                        type: "property",
+                        value: v as ConfigValue,
+                        valueType: typeof v as "string" | "number" | "boolean",
+                      };
+                    }
+                    return acc;
+                  },
+                  {} as Record<string, ConfigItem>
+                ),
+              };
+            } else {
+              // It's a property
+              newConfig[key] = {
+                type: "property",
+                value: value as ConfigValue,
+                valueType: typeof value as "string" | "number" | "boolean",
+              };
+            }
+          });
+
+          setConfigData(newConfig);
+        } catch (parseError) {
+          console.error("Error parsing config:", parseError);
+          throw new Error("Failed to parse configuration");
+        }
+      } catch (err) {
+        console.error("Error fetching config:", err);
+        setError(err instanceof Error ? err.message : "Failed to load config");
+      }
+    };
+
+    fetchConfig();
+  }, []);
 
   const toggleSection = (path: string) => {
     setOpenSections((prev) => ({
@@ -487,16 +283,193 @@ export function ConfigSection() {
 
   const isOpen = (path: string) => openSections[path] || false;
 
+  if (error) {
+    return (
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-12">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Badge variant="destructive">Error</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold text-balance">
+            Failed to Load Configuration
+          </h2>
+          <p className="text-muted-foreground max-w-2xl text-center">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!configData) {
+    const loadingConfig = {
+      verificationMethods: {
+        type: "group",
+        properties: {
+          twoFactor: {
+            type: "group",
+            properties: {
+              enabled: {
+                type: "property",
+                value: true,
+                valueType: "boolean",
+              },
+              methods: {
+                type: "property",
+                value: "all",
+                valueType: "string",
+              },
+            },
+          },
+          passwordRules: {
+            type: "group",
+            properties: {
+              minLength: {
+                type: "property",
+                value: 12,
+                valueType: "number",
+              },
+              requireSpecial: {
+                type: "property",
+                value: true,
+                valueType: "boolean",
+              },
+            },
+          },
+        },
+      },
+      emailAlerts: {
+        type: "group",
+        properties: {
+          loginAttempts: {
+            type: "property",
+            value: true,
+            valueType: "boolean",
+          },
+          newDevices: {
+            type: "property",
+            value: true,
+            valueType: "boolean",
+          },
+        },
+      },
+      sessionTimeout: {
+        type: "property",
+        value: 3600,
+        valueType: "number",
+      },
+    } as Record<string, ConfigItem>;
+
+    return (
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-12">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Badge variant="outline">Configuration</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold text-balance">
+            Quick config, full code access
+          </h2>
+          <p className="text-muted-foreground max-w-2xl text-center">
+            Adjust common settings through a simple config file. Need more? You
+            own the code - customize the implementation however you want.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-6 items-center">
+          <div className="rounded-md overflow-hidden border bg-card shadow-sm max-w-3xl mx-auto w-full">
+            {/* Mac window header */}
+            <div className="flex items-center justify-between px-4 py-2 bg-secondary border-b">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                <div className="w-3 h-3 rounded-full bg-green-500" />
+              </div>
+              <div className="text-xs text-muted-foreground font-medium">
+                auth.ts
+              </div>
+            </div>
+
+            {/* Loading preview with blur and gradient */}
+            <div className="relative">
+              <div className="blur-[2px] opacity-50">
+                <pre className="p-4 text-sm overflow-x-auto hide-scrollbar">
+                  <code>
+                    <span className="text-blue-500">export const</span>{" "}
+                    <span className="text-purple-500">AUTH_CONFIG</span> = {"{"}
+                    {"\n"}
+                    {Object.entries(loadingConfig).map(
+                      ([key, item], i, arr) => (
+                        <span key={key}>
+                          {"  "}
+                          {item.type === "group" ? (
+                            <ConfigGroupView
+                              name={key}
+                              item={item}
+                              path=""
+                              isOpen={true}
+                              onToggle={() => {}}
+                              isPathOpen={() => true}
+                              onPathToggle={() => {}}
+                              indentLevel={1}
+                            />
+                          ) : (
+                            <>
+                              <ConfigPropertyView name={key} item={item} />:{" "}
+                              <ConfigValue
+                                value={item.value}
+                                type={item.valueType}
+                              />
+                            </>
+                          )}
+                          {i < arr.length - 1 ? "," : ""}
+                          {"\n"}
+                        </span>
+                      )
+                    )}
+                    {"}"} as const;
+                  </code>
+                </pre>
+              </div>
+              {/* Animated gradient overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.25), transparent 30%, transparent 70%, rgba(0,0,0,0.25))",
+                  animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                  opacity: 0.7,
+                }}
+              />
+              {/* Loading indicator */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-background/95 px-4 py-2 rounded-full shadow-lg">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Loading configuration...</span>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-card to-transparent pointer-events-none" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Info className="h-4 w-4 flex-shrink-0" />
+            <span>Pro tip: Click any section to expand it</span>
+          </div>
+          <Link href="https://github.com/mazeincoding/mazeway/blob/main/src/config/auth.ts">
+            <Button size="lg" variant="outline">
+              View Full Configuration
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-12">
       <div className="flex flex-col items-center gap-4 text-center">
         <Badge variant="outline">Configuration</Badge>
         <h2 className="text-3xl md:text-4xl font-bold text-balance">
-          Quick Config, Full Code Access
+          Quick config, full code access
         </h2>
         <p className="text-muted-foreground max-w-2xl text-center">
           Adjust common settings through a simple config file. Need more? You
-          own the code – customize the implementation however you want.
+          own the code - customize the implementation however you want.
         </p>
       </div>
 
@@ -521,35 +494,30 @@ export function ConfigSection() {
                 <span className="text-blue-500">export const</span>{" "}
                 <span className="text-purple-500">AUTH_CONFIG</span> = {"{"}
                 {"\n"}
-                {Object.entries(AUTH_CONFIG_STRUCTURE).map(
-                  ([key, item], i, arr) => (
-                    <span key={key}>
-                      {"  "}
-                      {item.type === "group" ? (
-                        <ConfigGroupView
-                          name={key}
-                          item={item}
-                          path=""
-                          isOpen={isOpen(key)}
-                          onToggle={() => toggleSection(key)}
-                          isPathOpen={isOpen}
-                          onPathToggle={toggleSection}
-                          indentLevel={1}
-                        />
-                      ) : (
-                        <>
-                          <ConfigPropertyView name={key} item={item} />:{" "}
-                          <ConfigValue
-                            value={item.value}
-                            type={item.valueType}
-                          />
-                        </>
-                      )}
-                      {i < arr.length - 1 ? "," : ""}
-                      {"\n"}
-                    </span>
-                  )
-                )}
+                {Object.entries(configData).map(([key, item], i, arr) => (
+                  <span key={key}>
+                    {"  "}
+                    {item.type === "group" ? (
+                      <ConfigGroupView
+                        name={key}
+                        item={item}
+                        path=""
+                        isOpen={isOpen(key)}
+                        onToggle={() => toggleSection(key)}
+                        isPathOpen={isOpen}
+                        onPathToggle={toggleSection}
+                        indentLevel={1}
+                      />
+                    ) : (
+                      <>
+                        <ConfigPropertyView name={key} item={item} />:{" "}
+                        <ConfigValue value={item.value} type={item.valueType} />
+                      </>
+                    )}
+                    {i < arr.length - 1 ? "," : ""}
+                    {"\n"}
+                  </span>
+                ))}
                 {"}"} as const;
               </code>
             </pre>
