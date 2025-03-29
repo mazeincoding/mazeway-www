@@ -20,9 +20,9 @@ export default function AboutPage() {
           </h1>
           <div className="prose prose-lg dark:prose-invert">
             <p className="text-xl text-muted-foreground mb-12">
-              Hi, I'm Maze. I'm a security-first developer who believes
-              authentication should live in your project, not in a node_modules
-              folder.
+              Hi, I'm Maze, the creator of Mazeway. I'm a security-first
+              developer who believes authentication should live in your project,
+              not in a node_modules folder.
             </p>
 
             <section className="mb-12">
