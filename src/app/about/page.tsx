@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About - Mazeway Auth",
+  title: "About - Mazeway",
   description:
-    "Learn about Mazeway Auth - a security-first developer building authentication that belongs in your project, not in node_modules.",
+    "Learn about Mazeway - a security-first developer building authentication that belongs in your project, not in node_modules.",
 };
 
 export default function AboutPage() {

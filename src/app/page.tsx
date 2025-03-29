@@ -6,7 +6,7 @@ import { Features } from "@/components/features";
 import { Services } from "@/components/services";
 
 export const metadata: Metadata = {
-  title: "Mazeway Auth - Own Your Authentication Code",
+  title: "Mazeway - Own Your Authentication Code",
   description:
     "Authentication should live in your project, not in node_modules. A complete, production-ready auth foundation you can build on.",
 };

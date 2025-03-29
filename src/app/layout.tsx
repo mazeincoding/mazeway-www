@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mazeway Auth - Own Your Authentication Code",
+  title: "Mazeway - Own Your Authentication Code",
   description:
     "Authentication should live in your project, not in node_modules. A complete, production-ready auth foundation you can build on - think shadcn/ui for auth, but with enterprise features built-in.",
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Mazeway Auth - Own Your Authentication Code",
+    title: "Mazeway - Own Your Authentication Code",
     description:
       "Authentication should live in your project, not in node_modules. A complete auth foundation you can truly own and customize, with enterprise features built-in.",
     type: "website",
@@ -44,13 +44,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Mazeway Auth - Own Your Authentication Code",
+        alt: "Mazeway - Own Your Authentication Code",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mazeway Auth - Own Your Authentication Code",
+    title: "Mazeway - Own Your Authentication Code",
     description:
       "Authentication should live in your project, not in node_modules. A complete auth foundation you can truly own and customize.",
     images: ["/og-image.jpg"],
@@ -71,7 +71,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "Mazeway Auth",
+              name: "Mazeway",
               applicationCategory: "DeveloperApplication",
               operatingSystem: "Any",
               offers: {
