@@ -14,19 +14,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Mazeway - Own Your Authentication Code",
+export const meta: Metadata = {
+  title: {
+    default: "Mazeway - Complete auth you own",
+    template: "%s | Mazeway",
+  },
   description:
-    "Authentication should live in your project, not in node_modules. A complete, production-ready auth foundation you can build on - think shadcn/ui for auth, but with enterprise features built-in.",
+    "A complete, production-ready auth foundation you can build on - like Clerk but you own the code.",
   keywords: [
-    "modern web app authentication",
-    "authentication foundation",
-    "own your auth code",
-    "customizable authentication",
     "Next.js auth starter",
+    "Shadcn UI for auth",
+    "Mazeway",
+    "Maze Winther",
+    "Next.js auth",
+    "Open source Clerk",
     "Supabase auth",
-    "enterprise authentication",
-    "open source auth",
+    "Supabase auth starter",
+    "Enterprise authentication",
+    "Open source auth",
   ],
   authors: [{ name: "Maze" }],
   metadataBase: new URL("https://mazeway.dev"),
@@ -36,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mazeway - Own Your Authentication Code",
     description:
-      "Authentication should live in your project, not in node_modules. A complete auth foundation you can truly own and customize, with enterprise features built-in.",
+      "A complete, production-ready auth foundation you can build on - like Clerk but you own the code.",
     type: "website",
     url: "https://mazeway.dev",
     images: [
@@ -52,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mazeway - Own Your Authentication Code",
     description:
-      "Authentication should live in your project, not in node_modules. A complete auth foundation you can truly own and customize.",
+      "A complete, production-ready auth foundation you can build on - like Clerk but you own the code.",
     images: ["/og-image.jpg"],
   },
 };
