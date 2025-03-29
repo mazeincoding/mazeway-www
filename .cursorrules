@@ -1,0 +1,64 @@
+
+START SPECIFICATION:
+# main-overview
+
+## Development Guidelines
+
+- Only modify code directly relevant to the specific request. Avoid changing unrelated functionality.
+- Never replace code with placeholders like `# ... rest of the processing ...`. Always include complete code.
+- Break problems into smaller steps. Think through each step separately before implementing.
+- Always provide a complete PLAN with REASONING based on evidence from code and logs before making changes.
+- Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
+
+
+The project implements an authentication system with the following core components:
+
+### Authentication Configuration Management
+- Location: `src/components/config-section.tsx`
+- Importance: 95
+- Handles dynamic fetching and processing of authentication configuration from GitHub
+- Converts TypeScript configs into hierarchical JSON structures
+- Manages collapsible configuration views for user exploration
+
+### Enterprise Authentication Services 
+- Location: `src/components/services.tsx`
+- Importance: 90
+- Implements enterprise-grade authentication service management
+- Provides categorized service listings with status indicators
+- Handles service implementation requests via CTA integration
+
+### Form Validation and Submission Pipeline
+- Location: `src/app/contact`, `src/lib/schemas.ts`
+- Importance: 85
+- Custom validation using Zod schemas
+- Local storage persistence with JSON export
+- Rate-limited API submission with Redis integration
+
+### Code Conventions
+
+### Authentication Configuration
+- MUST: Use TypeScript interfaces for auth config structures defined in `src/data/auth-config.ts`
+- AVOID: Hardcoding configuration values directly in components
+- WHY: Ensures type safety and centralized configuration management
+- EXAMPLE: `src/components/config-section.tsx` configuration fetching
+
+### Service Integration
+- MUST: Implement service status checks via the ServiceProvider interface
+- AVOID: Direct service calls without status verification
+- WHY: Maintains service reliability and proper error handling
+- EXAMPLE: `src/components/services.tsx` service listing implementation
+
+### Contact Form Processing
+- MUST: Validate all form submissions using Zod schemas from `src/lib/schemas.ts`
+- AVOID: Raw form data submission without validation
+- WHY: Ensures data integrity and consistent validation
+- EXAMPLE: Contact form implementation in `src/app/contact/page.tsx`
+
+### Rate Limiting
+- MUST: Use Upstash Redis for rate limiting with 100 req/min per IP
+- AVOID: Implementing custom rate limiting solutions
+- WHY: Provides reliable and scalable request throttling
+- EXAMPLE: Rate limiting implementation in `src/utils/rate-limit.ts`
+
+$END$
+END SPECIFICATION

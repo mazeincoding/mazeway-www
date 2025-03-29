@@ -1,0 +1,57 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# contact-form-workflow
+
+### Form Validation Schema
+- MUST: Implement Zod validation schema in `src/lib/schemas.ts` for contact form data
+- AVOID: Custom validation logic outside the schema definition
+- WHY: Ensures consistent validation across frontend and API endpoints
+- EXAMPLE: From `src/lib/schemas.ts`:
+```typescript
+contactFormSchema: z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  timeline: z.string(),
+  message: z.string().min(10)
+})
+```
+
+### Rate Limiting 
+- MUST: Use Upstash Redis with @upstash/ratelimit for API protection in `src/utils/rate-limit.ts`
+- AVOID: In-memory rate limiting or session-based restrictions
+- WHY: Provides distributed rate limiting across serverless functions
+- EXAMPLE: `src/app/api/contact/route.ts` implements 100 requests per minute per IP
+
+### Email Generation
+- MUST: Use React Email components in `emails/contact-form.tsx` for consistent email templates
+- AVOID: Plain text emails or HTML string concatenation
+- WHY: Ensures maintainable, type-safe email templates with consistent styling
+- EXAMPLE: ContactFormEmail component with dynamic props for name, email, company, timeline, message
+
+### Form Submission Flow
+- MUST: Implement the following workflow in `src/app/contact/page.tsx`:
+  1. Client-side validation
+  2. Local storage backup
+  3. API submission
+  4. Email notification
+- AVOID: Direct email sending from frontend or skipping validation steps
+- WHY: Provides resilient submission process with fallbacks
+- EXAMPLE: Form submission handler in `src/app/contact/page.tsx`
+
+### Data Persistence
+- MUST: Save form submissions to local storage before API submission
+- AVOID: Relying solely on API submission without local backup
+- WHY: Prevents data loss during network failures
+- EXAMPLE: Local storage integration in contact form component
+
+Importance Scores:
+- Form Validation Schema: 85
+- Rate Limiting: 80  
+- Email Generation: 75
+- Form Submission Flow: 90
+- Data Persistence: 70
+
+$END$

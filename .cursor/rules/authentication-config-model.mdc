@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# authentication-config-model
+
+### Authentication Configuration Structure
+- MUST: Define auth config using TypeScript interfaces in `src/data/auth-config.ts`
+- MUST: Include required fields: verificationMethods, backupCodes, deviceSessions
+- AVOID: Storing sensitive values directly in config
+- WHY: Ensures type-safe authentication configuration and prevents runtime errors
+- EXAMPLE:
+```typescript
+// src/data/auth-config.ts
+interface AuthConfig {
+  verificationMethods: {
+    email: boolean;
+    sms: boolean;
+    totp: boolean;
+  };
+  backupCodes: {
+    enabled: boolean;
+    count: number;
+  };
+}
+```
+Importance: 95
+
+### Verification Method Validation
+- MUST: Implement validation using Zod schemas in `src/lib/schemas.ts`
+- MUST: Validate all verification method combinations
+- AVOID: Direct boolean checks without schema validation
+- WHY: Ensures configuration integrity and prevents invalid auth states
+- EXAMPLE: File reference: `src/lib/schemas.ts` - verification method schemas
+Importance: 90
+
+### Device Session Management
+- MUST: Configure session parameters in `src/data/auth-config.ts`
+- MUST: Include expiration, refresh tokens, and device fingerprinting
+- AVOID: Hardcoding session durations
+- WHY: Enables flexible session management across different device types
+Importance: 85
+
+### Configuration Processing
+- MUST: Parse config using dedicated processor in `src/components/config-section.tsx`
+- MUST: Support hierarchical JSON structure for nested settings
+- AVOID: Direct mutation of configuration objects
+- WHY: Maintains configuration integrity and enables dynamic updates
+Importance: 85
+
+### Contact Form Integration 
+- MUST: Use configuration-driven validation in `src/app/api/contact/route.ts`
+- MUST: Apply rate limiting based on auth config settings
+- AVOID: Bypassing configuration-based restrictions
+- WHY: Ensures consistent security policies across contact forms
+Importance: 75
+
+$END$

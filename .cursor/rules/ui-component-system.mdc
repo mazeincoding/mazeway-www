@@ -1,0 +1,54 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# ui-component-system
+
+### Component Architecture
+- MUST: Organize UI components into atomic and composite hierarchies following `src/components/ui/*` and `src/components/*` structure
+- AVOID: Creating deeply nested component dependencies or circular references
+- WHY: Promotes reusability and maintainable component relationships
+- EXAMPLE: `src/components/ui/button.tsx` as atomic, `src/components/features.tsx` as composite
+
+### State Management Patterns
+- MUST: Use React Context for shared state (e.g., sidebar collapse state in `src/components/ui/sidebar.tsx`)
+- AVOID: Prop drilling beyond 2 levels deep
+- WHY: Enables clean component communication while maintaining isolation
+- EXAMPLE: Sidebar context provider pattern in `sidebar.tsx`
+
+### Configuration Display
+- MUST: Implement collapsible views for complex configuration using `src/components/config-section.tsx`
+- AVOID: Static configuration displays or hardcoded values
+- WHY: Provides interactive exploration of configuration options
+- EXAMPLE: GitHub configuration fetching and parsing in `config-section.tsx`
+
+### Feature Presentation
+- MUST: Use grid-based card layouts with responsive breakpoints as shown in `src/components/features.tsx`
+- AVOID: Fixed-width layouts or non-responsive designs
+- WHY: Ensures consistent feature presentation across devices
+- EXAMPLE: Feature cards with icon, title, and description in `features.tsx`
+
+### Component Library Structure
+Importance Score: 85
+- Base UI Components (`src/components/ui/`)
+  - Form Controls: `button.tsx`, `input.tsx`, `checkbox.tsx`
+  - Navigation: `menubar.tsx`, `navigation-menu.tsx`, `sidebar.tsx`
+  - Feedback: `alert.tsx`, `toast.tsx`, `progress.tsx`
+  - Layout: `card.tsx`, `dialog.tsx`, `drawer.tsx`
+
+### Business-Specific Components
+Importance Score: 90
+- `config-section.tsx`: Dynamic configuration visualization
+- `features.tsx`: Product feature showcase
+- `services.tsx`: Enterprise service offerings
+- `header.tsx`: Navigation and branding
+
+### Component Relationships
+Importance Score: 75
+- Header -> Navigation Menu
+- Config Section -> Collapsible
+- Features -> Card
+- Services -> Badge + Button
+
+$END$

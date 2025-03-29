@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# data-processing-algorithms
+
+### Configuration Data Processing
+- MUST: Implement TypeScript-to-JSON conversion in `src/components/config-section.tsx`
+  - Parse TypeScript configuration into hierarchical JSON structure
+  - Preserve nested configuration relationships
+  - Support dynamic fetching from GitHub repository
+- AVOID: 
+  - Direct string manipulation of TypeScript code
+  - Hard-coding configuration structures
+- WHY: Ensures configuration data remains maintainable and type-safe while being presentable to users
+- EXAMPLE: `src/components/config-section.tsx` implementation
+
+### Rate Limiting Algorithm
+- MUST: Use Upstash Redis with @upstash/ratelimit in `src/utils/rate-limit.ts`
+  - Configure 100 requests/minute per IP
+  - Extract client IP from request headers
+  - Implement secure rate tracking
+- AVOID:
+  - In-memory rate limiting
+  - Sharing rate limit counters across instances
+- WHY: Prevents API abuse while ensuring scalability
+- EXAMPLE: Rate limiting implementation in `src/utils/rate-limit.ts`
+
+### Form Data Processing
+- MUST: Use Zod schemas from `src/lib/schemas.ts` for validation
+  - Validate contact form submissions
+  - Store form data in local storage
+  - Generate downloadable JSON output
+- AVOID:
+  - Manual validation checks
+  - Direct form submission without schema validation
+- WHY: Ensures data integrity and consistent validation across frontend/backend
+- EXAMPLE: Contact form handling in `src/app/contact/page.tsx`
+
+### Contact Email Generation
+- MUST: Use conditional rendering in `emails/contact-form.tsx`
+  - Dynamic field incorporation
+  - Optional field handling with fallbacks
+  - Preserve message formatting
+- AVOID:
+  - Hard-coded email templates
+  - Direct string concatenation
+- WHY: Creates consistent, professional email communications
+- EXAMPLE: Email template in `emails/contact-form.tsx`
+
+Importance Scores:
+- Configuration Processing: 95 (Core business data handling)
+- Rate Limiting: 85 (Critical API protection)
+- Form Processing: 75 (Key business workflow)
+- Email Generation: 65 (Supporting business function)
+
+$END$

@@ -1,0 +1,22 @@
+[
+  {
+    "fileName": "main-overview.mdc",
+    "description": "Complete system overview including component architecture, key features, and high-level data flow patterns"
+  },
+  {
+    "fileName": "ui-component-system.mdc",
+    "description": "Detailed documentation of the extensive UI component library structure, component relationships, and state management patterns"
+  },
+  {
+    "fileName": "authentication-config-model.mdc",
+    "description": "Comprehensive documentation of the authentication configuration data model, validation rules, and processing algorithms"
+  },
+  {
+    "fileName": "contact-form-workflow.mdc",
+    "description": "End-to-end documentation of contact form data flow, including validation schemas, rate limiting algorithm, and email generation process"
+  },
+  {
+    "fileName": "data-processing-algorithms.mdc",
+    "description": "Documentation of core algorithms including config parsing, TypeScript-to-JSON conversion, and rate limiting implementation"
+  }
+]
