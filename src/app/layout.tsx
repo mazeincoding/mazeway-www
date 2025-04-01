@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: {
     default: "Mazeway - Complete auth you own",
     template: "%s | Mazeway",
