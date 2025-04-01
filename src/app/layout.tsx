@@ -36,7 +36,7 @@ export const meta: Metadata = {
   authors: [{ name: "Maze" }],
   metadataBase: new URL("https://mazeway.dev"),
   alternates: {
-    canonical: "/",
+    canonical: "https://mazeway.dev/",
   },
   openGraph: {
     title: "Mazeway - Own Your Authentication Code",
