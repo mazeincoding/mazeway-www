@@ -4,6 +4,7 @@ import { ConfigSection } from "@/components/config-section";
 import { Hero } from "@/components/hero";
 import { Features } from "@/components/features";
 import { Services } from "@/components/services";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Mazeway - Own Your Authentication Code",
@@ -21,6 +22,7 @@ export default function Home() {
         <ConfigSection />
         <Services />
       </main>
+      <Footer />
     </div>
   );
 }
