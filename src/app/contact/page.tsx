@@ -137,7 +137,6 @@ export default function ContactPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <main className="flex-grow flex flex-col gap-24 px-4 py-24 md:px-8">
         <div className="w-full max-w-6xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center gap-4">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaGithub, FaXTwitter } from "react-icons/fa6";
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="bg-background text-foreground border-t">
       <div className="container mx-auto px-4 py-12">
