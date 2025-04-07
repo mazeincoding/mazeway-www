@@ -9,29 +9,29 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <h3 className="font-bold text-lg mb-4">Mazeway</h3>
             <p className="text-sm text-muted-foreground max-w-md">
-              Authentication should live in your project, not in node_modules. A complete, 
-              production-ready auth foundation you can build on.
+              Authentication should live in your project, not in node_modules. A
+              complete, production-ready auth foundation you can build on.
             </p>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <nav className="flex flex-col gap-2">
-              <Link 
+              <Link
                 href="/about"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 About
               </Link>
               <Link
-                href="/privacy" 
+                href="/privacy"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Privacy
               </Link>
               <Link
                 href="/terms"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors" 
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Terms
               </Link>
@@ -51,7 +51,7 @@ export default function Footer() {
               </Link>
               <Link
                 href="https://x.com/mazeway"
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
@@ -63,7 +63,7 @@ export default function Footer() {
 
         <div className="mt-6 pt-6 text-center md:text-left">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Mazeway. All rights reserved.
+            &copy; Mazeway. All rights reserved.
           </p>
         </div>
       </div>
